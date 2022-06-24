@@ -67,7 +67,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         }
         catch (Exception e) {}
 
-        UserDetails userInfo = userDetailsService.loadUserByUsername(userName); // 这里调用我们的自己写的获取用户的方法；
+        UserDetails userInfo = userDetailsService.loadUserByUsername(pr.split("\\|")[0]); // 这里调用我们的自己写的获取用户的方法；
         if (userInfo == null) {
             throw new BadCredentialsException("用户名不存在");
         }
