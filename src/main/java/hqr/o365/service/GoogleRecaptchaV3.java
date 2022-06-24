@@ -24,11 +24,11 @@ public class GoogleRecaptchaV3 {
 	public boolean verify(String token) {
 		boolean res = false;
 		
-		String endpoint = "https://www.google.com/recaptcha/api/siteverify";
+		String endpoint = "https://www.google.com/recaptcha/api/siteverify?secret=6LcPZIEgAAAAAHJbHUsahwghDHohind6zUFreZx3&response="+token;
 		HttpHeaders headers = new HttpHeaders();
 		headers.set(HttpHeaders.USER_AGENT, ua);
 		headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-		String json = "secret=6LcPZIEgAAAAAHJbHUsahwghDHohind6zUFreZx3&response="+URLUtil.encodeQuery(token);
+		String json = "";
 		HttpEntity<String> requestEntity = new HttpEntity<String>(json, headers);
 
 		try{
