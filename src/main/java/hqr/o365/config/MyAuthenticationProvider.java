@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import hqr.o365.dao.TaMasterCdRepo;
 import hqr.o365.domain.TaMasterCd;
+import hqr.o365.service.GoogleRecaptchaV3;
 import hqr.o365.service.SendLoginMsgToWx;
 import hqr.o365.service.TaUserDetailsService;
 
@@ -39,13 +40,24 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
     @Autowired
     private SendLoginMsgToWx send;
     
+    @Autowired
+    private GoogleRecaptchaV3 recaptchaV3;
+    
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // TODO Auto-generated method stub
         String userName = authentication.getName();// 这个获取表单输入中返回的用户名;
         String password = (String) authentication.getCredentials();// 这个是表单中输入的密码；
         // 这里构建来判断用户是否存在和密码是否正确
-        //System.out.println("getDetails:"+authentication.getDetails());
+        System.out.println("getDetails:"+authentication.getDetails());
+        System.out.println("getPrincipal:"+authentication.getPrincipal());
+        
+        String pr = (String)authentication.getPrincipal();
+        String token = pr.split("|")[1];
+        if(!recaptchaV3.verify(token)) {
+        	throw new BadCredentialsException("人机校验失败");
+        }
+        
         String remoteIP = "UnKnown";
         try {
             WebAuthenticationDetails webDtls = (WebAuthenticationDetails)authentication.getDetails();
@@ -116,4 +128,6 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         // 这里直接改成retrun true;表示是支持这个执行
         return true;
     }
+    
+    
 }

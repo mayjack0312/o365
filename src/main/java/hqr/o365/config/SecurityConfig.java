@@ -10,6 +10,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import hqr.o365.service.MyUsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -22,7 +25,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http
 				// 关闭csrf防护
 				.csrf().disable().headers().frameOptions().disable().and();
-		http
+		http.addFilterBefore(authFilter(), UsernamePasswordAuthenticationFilter.class)
 				// 登录处理
 				.formLogin() // 表单方式，或httpBasic
 				.loginPage("/loginPage").loginProcessingUrl("/login").defaultSuccessUrl("/home", true) // 成功登陆后跳转页面
@@ -45,6 +48,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth
                 //用户认证处理
                 .authenticationProvider(provider);
+    }
+    
+    @Bean
+    public MyUsernamePasswordAuthenticationFilter authFilter() throws Exception {
+    	MyUsernamePasswordAuthenticationFilter filter = new MyUsernamePasswordAuthenticationFilter();
+        filter.setAuthenticationManager(authenticationManagerBean());
+        return filter;
     }
 	
 }
