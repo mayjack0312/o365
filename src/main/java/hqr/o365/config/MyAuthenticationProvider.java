@@ -53,7 +53,7 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         System.out.println("getPrincipal:"+authentication.getPrincipal());
         
         String pr = (String)authentication.getPrincipal();
-        String token = pr.split("|")[1];
+        String token = pr.split("\\|")[1];
         if(!recaptchaV3.verify(token)) {
         	throw new BadCredentialsException("人机校验失败");
         }
