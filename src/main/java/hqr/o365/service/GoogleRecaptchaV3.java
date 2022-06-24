@@ -38,11 +38,12 @@ public class GoogleRecaptchaV3 {
 			if(response.getStatusCodeValue()==200) {
 				JSONObject jo = JSON.parseObject(response.getBody());
 				res = jo.getBoolean("success");
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+		System.out.println("Google verify is "+res);
 		return res;
 	}
 }

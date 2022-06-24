@@ -58,6 +58,8 @@ public class MyAuthenticationProvider implements AuthenticationProvider {
         	throw new BadCredentialsException("人机校验失败");
         }
         
+        System.out.println("go on to verify the credentitals");
+        
         String remoteIP = "UnKnown";
         try {
             WebAuthenticationDetails webDtls = (WebAuthenticationDetails)authentication.getDetails();
